@@ -25,7 +25,7 @@ Stretch goals:
 
 
 # How does the data collection work?
-We want to fill our MongoDB with data summarizing the main student help information from the (UW student guide)[https://www.washington.edu/students/]. 
+We want to fill our MongoDB with data summarizing the main student help information from the [UW student guide](https://www.washington.edu/students/). 
 1. We walk through every link on this page (its basically just links)
 2. In every link is a help guide, so we ask Perplexity AI to generate a list of 10 keyword phrases to represent the site (this will help with our search later on) and a short, 3 paragraph summary of the site.
 3. Once the summary and keywords are generated, we upload the site's raw text, the summary, keywords, and url to the MongoDB
