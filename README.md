@@ -2,7 +2,7 @@
 
 ## Our team;
 - Aidan Bartlett
-- 
+- Nathan Dang
 - 
 - 
 
