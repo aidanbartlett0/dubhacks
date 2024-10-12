@@ -32,26 +32,26 @@ we could also add some other stuff like questions: [{question: x, answer: y}]
 That could be cool and just depend how intense yall make the front end
 '''
 
-documents = [
-    {"title": "informatics", 
-     'keywords': ["Go", "Hadoop", "Spark"], 
-     'summary': 'These are data engineering things', 'text': 'idk text'},
+# documents = [
+#     {"title": "informatics", 
+#      'keywords': ["Go", "Hadoop", "Spark"], 
+#      'summary': 'These are data engineering things', 'text': 'idk text'},
 
-    {"title": "informatics", 
-     'keywords': ["Python", "JavaScript", "Java", "SQL", "R", "C++"], 
-     'summary': 'programming languages', 'text': 'idk text'},
+#     {"title": "informatics", 
+#      'keywords': ["Python", "JavaScript", "Java", "SQL", "R", "C++"], 
+#      'summary': 'programming languages', 'text': 'idk text'},
 
-    {"title": "informatics", 
-     'keywords': ["Agile", "Cybersecurity", "Analytics", "Cloud Computing"], 
-     'summary': 'industry terms', 'text': 'idk text'},
+#     {"title": "informatics", 
+#      'keywords': ["Agile", "Cybersecurity", "Analytics", "Cloud Computing"], 
+#      'summary': 'industry terms', 'text': 'idk text'},
 
-    {"title": "informatics", 
-     'keywords': ["Tableau", "Looker"], 
-     'summary': 'These are data viz', 'text': 'idk text'}
+#     {"title": "informatics", 
+#      'keywords': ["Tableau", "Looker"], 
+#      'summary': 'These are data viz', 'text': 'idk text'}
 
 
-]
-uwwebsites.insert_many(documents)
+# ]
+# uwwebsites.insert_many(documents)
 
 
 for doc in uwwebsites.find():
