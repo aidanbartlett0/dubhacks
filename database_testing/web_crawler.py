@@ -1,6 +1,25 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+from call_perplexity import *
+
+
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+
+uri = "mongodb+srv://aidanb04:dubhackshacker@dubhacks.qxk8w.mongodb.net/"
+
+client = MongoClient(uri, server_api=ServerApi('1'))
+
+# Send a ping to confirm a successful connection
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!\n")
+except Exception as e:
+    print(e)
+
+db = client['dubhacks']
+uwwebsites = db['uwwebsites']
 
 
 def get_site_content(url: str = 'https://www.washington.edu/students/',
@@ -18,6 +37,10 @@ def get_site_content(url: str = 'https://www.washington.edu/students/',
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'html.parser')
         print('link:', url, 'depth:', depth)
+        text = soup.get_text()
+        mongo_input = make_output(text)
+        mongo_input['url'] = url
+        uwwebsites.insert_one(mongo_input)
 
         links = get_links(soup, base_url=url, origin=origin)
         for child in links:
@@ -36,11 +59,12 @@ def get_links(soup, base_url, origin):
         elif href.startswith('/'):  # Handle relative URLs
             link_list.append(urljoin(base_url, href))
     if origin:
-        return link_list[:10]
+        return link_list[:1]
         # get 10 on original help page
     else:
-        return link_list[:3]
+        return link_list[:1]
         # 3 on all subpages
+
 
 
 get_site_content()
