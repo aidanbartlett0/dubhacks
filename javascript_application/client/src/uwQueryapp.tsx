@@ -17,7 +17,7 @@ const client = new MongoClient(uri);
 // includes the specific guest to show the dietary restrictions of.
 type Page = "query"; 
 //what is the AppState rn, facts are the thing tied to the server
-type UWQueryAppState = {page: Page, keywords: Map<string,bigint>, question:string,summary: string};
+type UWQueryAppState = {page: Page, keywords: ReadonlyArray<Fact>, question:string,summary: string};
 
 
 
@@ -30,7 +30,7 @@ const DEBUG: boolean = true;
    constructor(props: {}) {
      super(props);
  
-     this.state = {page:"query",keywords:new Map<string,bigint>(),summary: 'this is where your answer will be',question:"random"};
+     this.state = {page:"query",keywords:new Array<Fact>,summary: 'this is where your answer will be',question:"random"};
   }
 
 
@@ -38,7 +38,8 @@ const DEBUG: boolean = true;
 
     if (this.state.page === "query") {
       if (DEBUG) console.debug("rendering list page");
-      return <Query submit={this.state.summary}
+      return <Query facts={this.state.keywords}
+                        submit={this.state.summary}
                           submitClick={this.doSubmitClick}
                           question={this.state.question}
                           questionUpdate={this.doQuestChange}
@@ -64,12 +65,10 @@ const DEBUG: boolean = true;
   //
   const options = {
     method: 'POST',
-    headers: {
-      Authorization: 'Bearer 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',
-      'Content-Type': 'application/json'
-    },
-    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"role":"user","content":"'+'anything we give you look into:'+this.state.keywords+'and return the id of what matches the prompt:'+this.state.question+'the best"}],"search_domain_filter":[]}'
+    headers: {Authorization: 'Bearer <token>', 'Content-Type': 'application/json'},
+    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"role":"system","content":"Be precise and concise."},{"role":"user","content":"How many stars are there in our galaxy?"}],"max_tokens":"Optional","temperature":0.2,"top_p":0.9,"return_citations":true,"search_domain_filter":["perplexity.ai"],"return_images":false,"return_related_questions":false,"search_recency_filter":"month","top_k":0,"stream":false,"presence_penalty":0,"frequency_penalty":1}'
   };
+  
   fetch('https://api.perplexity.ai/chat/completions', options)
   .then(response => response.json())
   .then((response:any)=>{this.setState({summary:response.choices[0].message.content});console.log(response.choices[0].message.content)})
