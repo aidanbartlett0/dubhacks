@@ -7,7 +7,7 @@ import { Fact } from "./fact";
 // includes the specific guest to show the dietary restrictions of.
 type Page = "query"; 
 //what is the AppState rn, facts are the thing tied to the server
-type UWQueryAppState = {page: Page, facts: ReadonlyArray<Fact>, summary: String};
+type UWQueryAppState = {page: Page, facts: ReadonlyArray<Fact>, question:string,summary: string};
 
  
 //note Guest has map like properties by being able to access a single "additional guests"
@@ -21,7 +21,7 @@ const DEBUG: boolean = true;
    constructor(props: {}) {
      super(props);
  
-     this.state = {page:"query",facts:new Array<Fact>,summary: 'this is where your answer will be'};
+     this.state = {page:"query",facts:new Array<Fact>,summary: 'this is where your answer will be',question:"random"};
   }
 
 
@@ -30,15 +30,24 @@ const DEBUG: boolean = true;
     if (this.state.page === "query") {
       if (DEBUG) console.debug("rendering list page");
       return <Query facts={this.state.facts}
+                        submit={this.state.summary}
                           submitClick={this.doSubmitClick}
-                          onChange={()=>{}}/>;
+                          question={this.state.question}
+                          questionUpdate={this.doQuestChange}
+                          />;
 
     } 
      return <div></div>;
    };
-   doSubmitClick = (): void => {
+   doSubmitClick=(): void =>{
     if (DEBUG) console.debug("set state to add");
+    //perplexity call right here
     this.setState({summary:"worked"});
+
+  };
+  doQuestChange=(quest:string): void =>{
+    if (DEBUG) console.debug("set state to add");
+    this.setState({question:quest});
 
   };
  

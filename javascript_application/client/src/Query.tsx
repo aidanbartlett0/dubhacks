@@ -5,12 +5,13 @@ import { Fact } from './fact';
 
 type QueryProps = {
   facts: ReadonlyArray<Fact>,
-  submitClick: () => void,
-  onChange: (index: number) => void
+  submit:string,
+  submitClick:()=>void,
+  questionUpdate:(quest:string)=>void,
+  question:string
 };
 
 export type QueryState = {
-  question:string
 };
 
 
@@ -29,24 +30,23 @@ export class Query extends Component<QueryProps, QueryState> {
         <input
           type="text"
           placeholder="Enter your question"
-          value={this.state.question} // The current value of the input
+          value={this.props.question} // The current value of the input
           onChange={(e) => this.setQueryValue(e.target.value)} // Update the state on input change
         />
-        <button type="submit">Submit</button>
         <button type="button" onClick={this.doSubmitClick}>Submit</button>
         <h2>summary</h2>
         {this.renderSummary()}
       </div>);
   };
 
-  doSubmitClick=()=>{
+  doSubmitClick= (): void=>{
     this.props.submitClick();
   }
-  setQueryValue(value:string){
-    this.setState({question:value});
+  setQueryValue=(value:string):void=>{
+    this.props.questionUpdate(value);
   }
       
   renderSummary = (): JSX.Element => {
-    return <div>where summary goes</div>
+    return <div>{this.props.submit}</div>
   };
 }
