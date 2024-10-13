@@ -69,8 +69,8 @@ const DEBUG: boolean = true;
       Authorization: 'Bearer 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',
       'Content-Type': 'application/json'
     },
-    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"content":"Look through this map'+ this.stringify(this.state.keywords)+' and find the id for the answer which best fits the prompt'+this.state.question+'","role":"user"}]}'
-  };
+    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"role":"assistant","content":"input string"}],"search_domain_filter":[],"max_tokens":5000}'
+};
   console.log(this.stringify(this.state.keywords));
   await fetch('https://api.perplexity.ai/chat/completions', options)
   .then(response => response.json())
@@ -99,8 +99,19 @@ const DEBUG: boolean = true;
 }
 // Connection URL and Database Name
 stringify=(array:Array<Website>):string=>{
+  const temp =array.slice(0);
+  temp.forEach((web)=>{web._id=(web._id.slice(-3))});
   
-  return array.map((web)=>{return 'id:'+web._id+'\n keywords:'+web.keys;}).join('\n\n');
+  return temp.map((web)=>{
+    return 'id:'+web._id+'\n keywords:'+web.keys.map((str)=>{
+      if(str.length<30&&str.length>0){
+        return str+'*';
+      }else{//do nothing
+        return '';
+      }
+    }).join('');
+  
+  }).join('\n\n');
 }
 }
 
