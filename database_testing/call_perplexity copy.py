@@ -1,5 +1,7 @@
 import requests
 import ast
+import re
+import hashlib
 
 
 def call(content):
@@ -11,11 +13,11 @@ def call(content):
         "messages": [
             {
                 "role": "system",
-                "content": "Give a list of comma-seperated keywords or keyword pairs for the given text and give a two paragraph summary of the text, specifically focused on the keywords"
+                "content": "Your purpose is to summarize and pre-processs text from a website. Be clear and precise. Generate a list of 10 keywords for the given \"SITE CONTENT\" and a 3 paragraph summary of the \"SITE CONTENT\". The summary should not be bulletted lists, it should be 3 paragraphs of general summary text and should not include any URLS. The keywords should not be more than 3 tokens each and should not include URLs. Format your output to be EXACTLY like this: \"##KEYS## [<KEY>, <KEY>, <KEY>, <KEY>, <KEY>, <KEY>, <KEY>, <KEY>, <KEY>, <KEY>] ##SUMMARY##\". Exclude the rest of the \"SITE CONTENT\" from the output."
             },
             {
                 "role": "user",
-                "content": content
+                "content": f'SITE CONTENT: \"{content}\"'
             }
         ],
         "max_tokens": 1000,
@@ -46,6 +48,35 @@ def call(content):
 
 
 def extract_keywords(text):
+    keywords = text.split("##")[2]
+    keywords = keywords.split(',')
+    keys = [re.sub(r'[^a-zA-Z0-9\s]', '', i).strip() for i in keywords]
+    return keys
+
+
+def extract_summary(text):
+    summary = text.split("##")[4]
+    return summary
+
+
+def generate_hash(keywords):
+    keywords_str = ' '.join(keywords)
+    hash_object = hashlib.sha256(keywords_str.encode('utf-8'))
+    hex_dig = hash_object.hexdigest()
+    return hex_dig[:25]
+
+
+def make_output(content: str):
+    text = call(content)
+    keys = extract_keywords(text)
+    hash_id = generate_hash(keys)
+    summary = extract_summary(text)
+    return {'hash_id': hash_id, 'keys': keys, 'summary': summary}
+
+
+'''
+DEPRICATED - Old scraping prompt
+def extract_keywords(text):
     keywords = text.split('###')[1]
     lines = text.split('\n')
     keywords = []
@@ -63,10 +94,4 @@ def extract_sumary(text):
     if summary.startswith(' Summary:\n\n'):
         summary = summary[14:].strip()
     return summary
-
-
-def make_output(content: str):
-    text = call(content)
-    keys = extract_keywords(text)
-    summary = extract_sumary(text)
-    return {'text': text, 'keys': keys, 'sumamry': summary}
+'''

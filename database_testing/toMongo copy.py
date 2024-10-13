@@ -58,8 +58,20 @@ That could be cool and just depend how intense yall make the front end
 # for doc in uwwebsites.find():
 #     print(doc)
 
-x = [doc['url'] for doc in uwwebsites.find()]
-print(x)
+# x = [{'id': doc['_id'], 'keys': doc['keys']} for doc in uwwebsites.find()]
+# print(x[:2])
+c = 'Best Matching url: https://www.washington.edu/students/'
+url = c.split('url:')[-1].strip()
+myquery = {"url": url}
+print(url)
+mydoc = list(uwwebsites.find(myquery))
+
+
+
+print(mydoc[0]['sumamry'])  # This will print the list of documents
+
+
+
 
 '''
 Then you can do something like this so you can say
