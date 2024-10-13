@@ -1,7 +1,10 @@
 import React, { Component} from "react";
 import { Query } from './Query';
 import { Fact } from "./fact";
-const {perplexity} =require("node_perplexityai");
+//const {perplexity} =require("node_perplexityai");
+
+
+
 
 
 // Indicates which page to show. If it is the details page, the argument
@@ -54,18 +57,19 @@ const DEBUG: boolean = true;
  queryPerplexity=():void=>{
   const options = {
     method: 'POST',
-    headers: {Authorization: 'Bearer <token>', 'Content-Type': 'application/json'},
-    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"role":"system","content":"Be precise and concise."},{"role":"user","content":"How many stars are there in our galaxy?"}],"max_tokens":"Optional","temperature":0.2,"top_p":0.9,"return_citations":true,"search_domain_filter":["perplexity.ai"],"return_images":false,"return_related_questions":false,"search_recency_filter":"month","top_k":0,"stream":false,"presence_penalty":0,"frequency_penalty":1}'
+    headers: {
+      Authorization: 'Bearer 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',
+      'Content-Type': 'application/json'
+    },
+    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"role":"user","content":"'+'anything we give you look into:'+this.state.keywords+'and return the id of what matches the prompt:'+this.state.question+'the best"}],"search_domain_filter":[]}'
   };
-  
   fetch('https://api.perplexity.ai/chat/completions', options)
-    .then(response => response.json())
-    .then(response => console.log(response))
-    .catch(err => console.error(err));
-
- }
+  .then(response => response.json())
+  .then((response:any)=>{this.setState({summary:response.choices[0].message.content});console.log(response.choices[0].message.content)})
+  .catch(err => console.error(err));
   
   }
+}
 /*
 type WeddingAppState = {
   name: string;  // mirror state of name text box
