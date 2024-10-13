@@ -1,16 +1,16 @@
 import React, { Component} from "react";
 import { Query } from './Query';
 import { Fact } from "./fact";
+const {perplexity} =require("node_perplexityai");
 
 
 // Indicates which page to show. If it is the details page, the argument
 // includes the specific guest to show the dietary restrictions of.
 type Page = "query"; 
 //what is the AppState rn, facts are the thing tied to the server
-type UWQueryAppState = {page: Page, facts: ReadonlyArray<Fact>, question:string,summary: string};
+type UWQueryAppState = {page: Page, keywords: ReadonlyArray<Fact>, question:string,summary: string};
 
- 
-//note Guest has map like properties by being able to access a single "additional guests"
+
 
 // Whether to show debugging information in the console.
 const DEBUG: boolean = true;
@@ -21,7 +21,7 @@ const DEBUG: boolean = true;
    constructor(props: {}) {
      super(props);
  
-     this.state = {page:"query",facts:new Array<Fact>,summary: 'this is where your answer will be',question:"random"};
+     this.state = {page:"query",keywords:new Array<Fact>,summary: 'this is where your answer will be',question:"random"};
   }
 
 
@@ -29,7 +29,7 @@ const DEBUG: boolean = true;
 
     if (this.state.page === "query") {
       if (DEBUG) console.debug("rendering list page");
-      return <Query facts={this.state.facts}
+      return <Query facts={this.state.keywords}
                         submit={this.state.summary}
                           submitClick={this.doSubmitClick}
                           question={this.state.question}
@@ -40,8 +40,9 @@ const DEBUG: boolean = true;
      return <div></div>;
    };
    doSubmitClick=(): void =>{
-    if (DEBUG) console.debug("set state to add");
+    if (DEBUG) console.debug("do summary");
     //perplexity call right here
+    this.queryPerplexity();
     this.setState({summary:"worked"});
 
   };
@@ -50,7 +51,20 @@ const DEBUG: boolean = true;
     this.setState({question:quest});
 
   };
- 
+ queryPerplexity=():void=>{
+  const options = {
+    method: 'POST',
+    headers: {Authorization: 'Bearer <token>', 'Content-Type': 'application/json'},
+    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"role":"system","content":"Be precise and concise."},{"role":"user","content":"How many stars are there in our galaxy?"}],"max_tokens":"Optional","temperature":0.2,"top_p":0.9,"return_citations":true,"search_domain_filter":["perplexity.ai"],"return_images":false,"return_related_questions":false,"search_recency_filter":"month","top_k":0,"stream":false,"presence_penalty":0,"frequency_penalty":1}'
+  };
+  
+  fetch('https://api.perplexity.ai/chat/completions', options)
+    .then(response => response.json())
+    .then(response => console.log(response))
+    .catch(err => console.error(err));
+
+ }
+  
   }
 /*
 type WeddingAppState = {
