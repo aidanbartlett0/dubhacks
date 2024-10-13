@@ -89,12 +89,13 @@ const DEBUG: boolean = true;
   .then((response:any)=>{
     const found:string=response.choices[0].message.content;
     console.log(found);
-    const id:string= found.slice(22,-1);
+    const id:String= found.slice(22,-1);
     console.log('id found:'+id);
     const obj: Website | undefined = this.state.keywords.find((web: Website) => {
-      console.log('Comparing', web.hash_id, 'with', id); // Add this line for debugging
-      return web.hash_id === id; // Ensure the return
+      console.log('Comparing', `"${web.hash_id}"`, 'with', `"${id}"`); // Add quotes to visually identify extra spaces
+      return String(web.hash_id).trim().toLowerCase() === String(id).trim().toLowerCase();
     });
+    console.log(obj);
     let summ:string;
     if(obj!=undefined){
       summ=obj.summary;
