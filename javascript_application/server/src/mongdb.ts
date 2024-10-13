@@ -1,11 +1,18 @@
-import { MongoClient} from 'mongodb';
+import { MongoClient,ServerApiVersion} from 'mongodb';
 
 
 // MongoDB connection URI
 const uri = "mongodb+srv://aidanb04:dubhackshacker@dubhacks.qxk8w.mongodb.net/";
 
 // Create a new MongoClient
-const client = new MongoClient(uri, );
+const client = new MongoClient(uri, {
+  ssl: true,
+  //tlsInsecure: true, // Optional: for development only, avoids strict SSL validation
+  tlsAllowInvalidCertificates: true, // Optional: useful in testing environments
+  serverApi: ServerApiVersion.v1,
+  //useNewUrlParser: true,
+  //useUnifiedTopology: true,
+});
 
 // Route to fetch data from MongoDB
 export const getdb = (_req:any, res:any) => {
