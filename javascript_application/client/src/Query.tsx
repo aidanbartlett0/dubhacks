@@ -1,10 +1,9 @@
 import React, { Component} from 'react';
-import { Fact } from './fact';
+
 
 
 
 type QueryProps = {
-  facts: ReadonlyArray<Fact>,
   submit:string,
   submitClick:()=>void,
   questionUpdate:(quest:string)=>void,
