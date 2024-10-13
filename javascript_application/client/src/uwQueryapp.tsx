@@ -17,7 +17,7 @@ import { Query } from './Query';
 // includes the specific guest to show the dietary restrictions of.
 type Page = "query"; 
 //what is the AppState rn, facts are the thing tied to the server
-type UWQueryAppState = {page: Page, keywords: Map<string,bigint>, question:string,summary: string};
+type UWQueryAppState = {page: Page, keywords: any, question:string,summary: string};
 
 
 
@@ -61,43 +61,51 @@ const DEBUG: boolean = true;
 
   };
  queryPerplexity=():void=>{
-//this.fetchWebsites();
+ this.fetchWebsites();
   //
   const options = {
     method: 'POST',
-    headers: {Authorization: 'Bearer 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', 'Content-Type': 'application/json'},
-    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"role":"system","content":"Be precise and concise."},{"role":"user","content":"How many stars are there in our galaxy?"}],"max_tokens":"Optional","temperature":0.2,"top_p":0.9,"return_citations":true,"search_domain_filter":["perplexity.ai"],"return_images":false,"return_related_questions":false,"search_recency_filter":"month","top_k":0,"stream":false,"presence_penalty":0,"frequency_penalty":1}',
+    headers: {
+      Authorization: 'Bearer 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',
+      'Content-Type': 'application/json'
+    },
+    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"content":"Look through this map'+ this.state.keywords+' and find the id for the answer which best fits the prompt'+this.state.question+'","role":"user"}]}'
   };
   
   fetch('https://api.perplexity.ai/chat/completions', options)
   .then(response => response.json())
-  .then((response:any)=>{this.setState({summary:response.choices[0].message.content});console.log(response.choices[0].message.content)})
+  .then((response:any)=>{this.setState({summary:response.choices[0].message.content});console.log(response.choices[0].message.content);console.log(this.state.keywords)})
   .catch(err => console.error(err));
   }
 
-    /*
-   fetchWebsites = async () => {
+    
+   fetchWebsites = () => {
     try {
-      const response = await fetch('http://localhost:5000/api/mgdb', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        mode: 'no-cors' // Set the mode to 'no-cors'
-      });
-      
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data = await response.json();
-      this.setState({keywords:data});
-      console.log(data);
+      fetch('/api/mgdb', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          this.setState({ keywords: data });
+          console.log(data);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Unexpected error:', error);
     }
 
   
   
 
-}*/
+}
 // Connection URL and Database Name
 
 }
