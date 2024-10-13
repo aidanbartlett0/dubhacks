@@ -17,7 +17,7 @@ import { Query } from './Query';
 // includes the specific guest to show the dietary restrictions of.
 type Page = "query"; 
 //what is the AppState rn, facts are the thing tied to the server
-type UWQueryAppState = {page: Page, keywords: any, question:string,summary: string};
+type UWQueryAppState = {page: Page, keywords: Array<any>, question:string,summary: string};
 
 
 
@@ -30,12 +30,12 @@ const DEBUG: boolean = true;
    constructor(props: {}) {
      super(props);
  
-     this.state = {page:"query",keywords:new Map<string,bigint>(),summary: 'this is where your answer will be',question:"random"};
+     this.state = {page:"query",keywords:new Array<any>(),summary: 'this is where your answer will be',question:"random"};
   }
 
 
    render = (): JSX.Element => {
-
+    this.fetchWebsites();
     if (this.state.page === "query") {
       if (DEBUG) console.debug("rendering list page");
       return <Query
@@ -60,8 +60,7 @@ const DEBUG: boolean = true;
     this.setState({question:quest});
 
   };
- queryPerplexity=():void=>{
- this.fetchWebsites();
+ queryPerplexity=async():Promise<void>=>{
   //
   const options = {
     method: 'POST',
@@ -69,38 +68,30 @@ const DEBUG: boolean = true;
       Authorization: 'Bearer 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',
       'Content-Type': 'application/json'
     },
-    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"content":"Look through this map'+ this.state.keywords+' and find the id for the answer which best fits the prompt'+this.state.question+'","role":"user"}]}'
+    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"content":"Look through this map'+ this.state.keywords.toString()+' and find the id for the answer which best fits the prompt'+this.state.question+'","role":"user"}]}'
   };
-  
-  fetch('https://api.perplexity.ai/chat/completions', options)
+  console.log(this.state.keywords.toString());
+  await fetch('https://api.perplexity.ai/chat/completions', options)
   .then(response => response.json())
-  .then((response:any)=>{this.setState({summary:response.choices[0].message.content});console.log(response.choices[0].message.content);console.log(this.state.keywords)})
+  .then((response:any)=>{this.setState({summary:response.choices[0].message.content});console.log(response.choices[0].message.content);console.log(response);})
   .catch(err => console.error(err));
   }
 
     
-   fetchWebsites = () => {
-    try {
+   fetchWebsites = async (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+
       fetch('/api/mgdb', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          this.setState({ keywords: data });
-          console.log(data);
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
-    } catch (error) {
-      console.error('Unexpected error:', error);
-    }
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ keywords: data });
+        console.log(this.state.keywords);
+        resolve();
+      })
+   .catch(err => reject(err))});
 
   
   
