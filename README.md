@@ -2,7 +2,7 @@
 
 ## Our team;
 - Aidan Bartlett
-- Nathan Dang
+- 
 - 
 - 
 
@@ -29,6 +29,7 @@ We want to fill our MongoDB with data summarizing the main student help informat
 1. We walk through every link on this page (its basically just links)
 2. In every link is a help guide, so we ask Perplexity AI to generate a list of 10 keyword phrases to represent the site (this will help with our search later on) and a short, 3 paragraph summary of the site.
 3. Once the summary and keywords are generated, we upload the site's raw text, the summary, keywords, and url to the MongoDB
+4. Stretch goal - Since we have to call Perplexity to summarize every website, runtime is pretty poor. Try and use basic multithreading to speed up this process for fun!
 \
 This has been done, and our database is populated with essentially a summarized UW student guide
 

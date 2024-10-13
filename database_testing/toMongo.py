@@ -55,8 +55,11 @@ That could be cool and just depend how intense yall make the front end
 
 # uwwebsites.insert_one({'text': 'inserty testfnoiudoksndfjsnfk jsdn'})
 
-for doc in uwwebsites.find():
-    print(doc)
+# for doc in uwwebsites.find():
+#     print(doc)
+
+x = [doc['url'] for doc in uwwebsites.find()]
+print(x)
 
 '''
 Then you can do something like this so you can say
