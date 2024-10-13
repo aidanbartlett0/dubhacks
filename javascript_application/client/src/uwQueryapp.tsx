@@ -1,5 +1,6 @@
 import React, { Component} from "react";
 import { Query } from './Query';
+import {Website} from './website';
 //import { MongoClient} from 'mongodb';
 
 //const uri = "mongodb+srv://aidanb04:dubhackshacker@dubhacks.qxk8w.mongodb.net/";
@@ -17,7 +18,7 @@ import { Query } from './Query';
 // includes the specific guest to show the dietary restrictions of.
 type Page = "query"; 
 //what is the AppState rn, facts are the thing tied to the server
-type UWQueryAppState = {page: Page, keywords: Array<any>, question:string,summary: string};
+type UWQueryAppState = {page: Page, keywords: Array<Website>, question:string,summary: string};
 
 
 
@@ -30,7 +31,7 @@ const DEBUG: boolean = true;
    constructor(props: {}) {
      super(props);
  
-     this.state = {page:"query",keywords:new Array<any>(),summary: 'this is where your answer will be',question:"random"};
+     this.state = {page:"query",keywords:new Array<Website>(),summary: 'this is where your answer will be',question:"random"};
   }
 
 
@@ -76,7 +77,6 @@ const DEBUG: boolean = true;
   .then((response:any)=>{this.setState({summary:response.choices[0].message.content});console.log(response.choices[0].message.content);console.log(response);})
   .catch(err => console.error(err));
   }
-
     
    fetchWebsites = async (): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -87,7 +87,7 @@ const DEBUG: boolean = true;
       })
       .then(response => response.json())
       .then(data => {
-        this.setState({ keywords: data });
+        this.setState({ keywords: data.data });
         console.log(this.state.keywords);
         resolve();
       })
@@ -100,6 +100,7 @@ const DEBUG: boolean = true;
 // Connection URL and Database Name
 
 }
+
 /*
 type WeddingAppState = {
   name: string;  // mirror state of name text box
