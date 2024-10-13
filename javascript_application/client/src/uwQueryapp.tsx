@@ -17,7 +17,7 @@ const client = new MongoClient(uri);
 // includes the specific guest to show the dietary restrictions of.
 type Page = "query"; 
 //what is the AppState rn, facts are the thing tied to the server
-type UWQueryAppState = {page: Page, keywords: ReadonlyArray<Fact>, question:string,summary: string};
+type UWQueryAppState = {page: Page, keywords: Map<string,bigint>, question:string,summary: string};
 
 
 
@@ -30,7 +30,7 @@ const DEBUG: boolean = true;
    constructor(props: {}) {
      super(props);
  
-     this.state = {page:"query",keywords:new Array<Fact>,summary: 'this is where your answer will be',question:"random"};
+     this.state = {page:"query",keywords:new Map<string,bigint>(),summary: 'this is where your answer will be',question:"random"};
   }
 
 
@@ -38,7 +38,7 @@ const DEBUG: boolean = true;
 
     if (this.state.page === "query") {
       if (DEBUG) console.debug("rendering list page");
-      return <Query facts={this.state.keywords}
+      return <Query
                         submit={this.state.summary}
                           submitClick={this.doSubmitClick}
                           question={this.state.question}
