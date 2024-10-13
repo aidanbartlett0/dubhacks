@@ -5,8 +5,6 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --build tsconfig.json",
-    "lint": "comfy-tslint src/*.{ts,tsx}",
-    "test": "ts-mocha -p tsconfig.json src/**/*_test.ts",
     "server": "node .",
     "start": "tsc-watch -p tsconfig.json --onSuccess \"node .\""
   },

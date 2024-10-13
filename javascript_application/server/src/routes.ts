@@ -8,7 +8,7 @@ type SafeRequest = Request<ParamsDictionary, {}, Record<string, unknown>>;
 type SafeResponse = Response;  // only writing, so no need to check
 let array:Array<unknown>=new Array<unknown>;
 
-let savedPage: unknown='list';
+let savedPage: unknown='query';
 
 /** 
  * Returns a greeting message if "name" is provided in query params
