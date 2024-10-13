@@ -1,11 +1,11 @@
 import React, { Component} from "react";
 import { Query } from './Query';
-import { MongoClient} from 'mongodb';
+//import { MongoClient} from 'mongodb';
 
-const uri = "mongodb+srv://aidanb04:dubhackshacker@dubhacks.qxk8w.mongodb.net/";
+//const uri = "mongodb+srv://aidanb04:dubhackshacker@dubhacks.qxk8w.mongodb.net/";
 
 // Create a new MongoClient
-const client = new MongoClient(uri);
+//const client = new MongoClient(uri);
 //import { Fact } from "./fact";
 //const {perplexity} =require("node_perplexityai");
 
@@ -61,12 +61,12 @@ const DEBUG: boolean = true;
 
   };
  queryPerplexity=():void=>{
-
+//this.fetchWebsites();
   //
   const options = {
     method: 'POST',
-    headers: {Authorization: 'Bearer <token>', 'Content-Type': 'application/json'},
-    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"role":"system","content":"Be precise and concise."},{"role":"user","content":"How many stars are there in our galaxy?"}],"max_tokens":"Optional","temperature":0.2,"top_p":0.9,"return_citations":true,"search_domain_filter":["perplexity.ai"],"return_images":false,"return_related_questions":false,"search_recency_filter":"month","top_k":0,"stream":false,"presence_penalty":0,"frequency_penalty":1}'
+    headers: {Authorization: 'Bearer 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', 'Content-Type': 'application/json'},
+    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"role":"system","content":"Be precise and concise."},{"role":"user","content":"How many stars are there in our galaxy?"}],"max_tokens":"Optional","temperature":0.2,"top_p":0.9,"return_citations":true,"search_domain_filter":["perplexity.ai"],"return_images":false,"return_related_questions":false,"search_recency_filter":"month","top_k":0,"stream":false,"presence_penalty":0,"frequency_penalty":1}',
   };
   
   fetch('https://api.perplexity.ai/chat/completions', options)
@@ -75,39 +75,32 @@ const DEBUG: boolean = true;
   .catch(err => console.error(err));
   }
 
-    
-
+    /*
+   fetchWebsites = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/mgdb', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        mode: 'no-cors' // Set the mode to 'no-cors'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      this.setState({keywords:data});
+      console.log(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
 
   
   
 
-}
+}*/
 // Connection URL and Database Name
-async function connectToMongoDB() {
-  try {
-    // Connect to the MongoDB server
-    await client.connect();
 
-    // Ping the server to check the connection
-    await client.db('admin').command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-
-    // Select the database and collection
-    const db = client.db('dubhacks');
-    const uwwebsites = db.collection('uwwebsites');
-
-    // Optionally: Test a query or insert operation
-    const data = await uwwebsites.findOne();
-    console.log('Sample data from uwwebsites collection:', data);
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-  } finally {
-    await client.close();
-  }
 }
-
-// Call the function to connect
-connectToMongoDB();
 /*
 type WeddingAppState = {
   name: string;  // mirror state of name text box
