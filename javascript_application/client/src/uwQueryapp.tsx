@@ -62,8 +62,16 @@ const DEBUG: boolean = true;
 
   };
  queryPerplexity=async():Promise<void>=>{
+
   //
-  const content:string="you are picking the id choice with the best answer to this question"+this.state.question+"from this dataset:"+this.stringify(this.state.keywords);
+  const temp:Array<Website> =this.state.keywords.slice(0);
+  const DICTIONARY:string=temp.map((web)=>{
+    return '\nhash_id: '+web.hash_id+' keys: '+web.keys;
+  }).join('\n');
+  const HASH:string=temp.map((web)=>{
+    return 'hash_id: '+web.hash_id;
+  }).join('\n');
+  const content:string="Given a dictionary of hash_ids and a list of KEYS at "+DICTIONARY+", return the URL where the keywords at KEYS best match the given "+this.state.question+". Return NOTHING except the "+HASH+" from the "+DICTIONARY+" that BEST matches the keywords at KEYS. Do not explain your reasoning. Do not return the keywords. Your response should be formatted like this: \"Best Matching hash_id: <hash_id HERE>.\". You CAN NOT return a hash_id that is not included in the "+HASH+""
   const options = {
     method: 'POST',
     headers: {
@@ -78,7 +86,25 @@ const DEBUG: boolean = true;
   console.log(this.stringify(this.state.keywords));
   await fetch('https://api.perplexity.ai/chat/completions', options)
   .then(response => response.json())
-  .then((response:any)=>{console.log(response);this.setState({summary:response.choices[0].message.content});console.log(response);})
+  .then((response:any)=>{
+    const found:string=response.choices[0].message.content;
+    console.log(found);
+    const id:string= found.slice(22,-1);
+    console.log('id found:'+id);
+    const obj: Website | undefined = this.state.keywords.find((web: Website) => {
+      console.log('Comparing', web.hash_id, 'with', id); // Add this line for debugging
+      return web.hash_id === id; // Ensure the return
+    });
+    let summ:string;
+    if(obj!=undefined){
+      summ=obj.summary;
+      console.log('Hash found');
+    }else{
+      summ='error';
+      console.log('Hash not found');
+    }
+
+    console.log(response);this.setState({summary:summ});console.log(response);})
   .catch(err => console.error(err));
   }
     
@@ -104,7 +130,6 @@ const DEBUG: boolean = true;
 // Connection URL and Database Name
 stringify=(array:Array<Website>):string=>{
   const temp =array.slice(0);
-  temp.forEach((web)=>{web._id=(web._id.slice(-3))});
   
   return temp.map((web)=>{
     return 'id:'+web._id+'\n keywords:'+web.keys.map((str)=>{

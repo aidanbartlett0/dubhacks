@@ -1,6 +1,6 @@
 
 export type Website ={
-readonly keys: Array<String>,
+keys: Array<String>,
 readonly summary: string,
 readonly text: string,
 readonly url: string,
