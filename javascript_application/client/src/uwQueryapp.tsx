@@ -1,5 +1,11 @@
 import React, { Component} from "react";
 import { Query } from './Query';
+import { MongoClient} from 'mongodb';
+
+const uri = "mongodb+srv://aidanb04:dubhackshacker@dubhacks.qxk8w.mongodb.net/";
+
+// Create a new MongoClient
+const client = new MongoClient(uri);
 //import { Fact } from "./fact";
 //const {perplexity} =require("node_perplexityai");
 
@@ -54,6 +60,8 @@ const DEBUG: boolean = true;
 
   };
  queryPerplexity=():void=>{
+
+  //
   const options = {
     method: 'POST',
     headers: {
@@ -66,9 +74,41 @@ const DEBUG: boolean = true;
   .then(response => response.json())
   .then((response:any)=>{this.setState({summary:response.choices[0].message.content});console.log(response.choices[0].message.content)})
   .catch(err => console.error(err));
+  }
+
+    
+
+
   
+  
+
+}
+// Connection URL and Database Name
+async function connectToMongoDB() {
+  try {
+    // Connect to the MongoDB server
+    await client.connect();
+
+    // Ping the server to check the connection
+    await client.db('admin').command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+    // Select the database and collection
+    const db = client.db('dubhacks');
+    const uwwebsites = db.collection('uwwebsites');
+
+    // Optionally: Test a query or insert operation
+    const data = await uwwebsites.findOne();
+    console.log('Sample data from uwwebsites collection:', data);
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
+  } finally {
+    await client.close();
   }
 }
+
+// Call the function to connect
+connectToMongoDB();
 /*
 type WeddingAppState = {
   name: string;  // mirror state of name text box

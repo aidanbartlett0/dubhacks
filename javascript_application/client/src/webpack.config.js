@@ -60,7 +60,15 @@ const config = {
   resolve: {
     extensions: [
       '.tsx', '.ts', '.js', '.jsx', '.json'
-    ]
+    ],
+    
+      fallback: {
+        "crypto": false,  // Polyfill for crypto
+        "timers": false,  // Polyfill for timers
+        'url':false,
+        'http':false
+      },
+    
   },
 
   entry: {
