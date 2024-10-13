@@ -1,51 +1,52 @@
-import React, { Component} from 'react';
-
-
-
+import React, { Component } from 'react';
+import './styles.css'; // Import the CSS file
 
 type QueryProps = {
-  submit:string,
-  submitClick:()=>void,
-  questionUpdate:(quest:string)=>void,
-  question:string
+  submit: string,
+  submitClick: () => void,
+  questionUpdate: (quest: string) => void,
+  question: string
 };
 
-export type QueryState = {
-};
+export type QueryState = {};
 
-
-// show regular page
+// Query Component
 export class Query extends Component<QueryProps, QueryState> {
 
   constructor(props: QueryProps) {
     super(props);
-    this.state = { question:'none'}
+    this.state = { question: 'none' };
   }
 
   render = (): JSX.Element => {
     return (
-      <div>
+      <div className="query-container">
+        {/* Add UW Photo at the top */}
+        <img src="./uw.png" alt="University of Washington" className="uw-photo" />
+        
         <h2>Question:</h2>
         <input
           type="text"
           placeholder="Enter your question"
-          value={this.props.question} // The current value of the input
-          onChange={(e) => this.setQueryValue(e.target.value)} // Update the state on input change
+          value={this.props.question}
+          onChange={(e) => this.setQueryValue(e.target.value)}
         />
         <button type="button" onClick={this.doSubmitClick}>Submit</button>
-        <h2>summary</h2>
+        <h2 className="summary-heading">Summary</h2> {/* Space between button and summary */}
         {this.renderSummary()}
-      </div>);
+      </div>
+    );
   };
 
-  doSubmitClick= (): void=>{
+  doSubmitClick = (): void => {
     this.props.submitClick();
   }
-  setQueryValue=(value:string):void=>{
+
+  setQueryValue = (value: string): void => {
     this.props.questionUpdate(value);
   }
-      
+
   renderSummary = (): JSX.Element => {
-    return <div>{this.props.submit}</div>
+    return <div className="summary">{this.props.submit}</div>;
   };
 }
