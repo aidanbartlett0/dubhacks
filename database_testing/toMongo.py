@@ -32,27 +32,28 @@ we could also add some other stuff like questions: [{question: x, answer: y}]
 That could be cool and just depend how intense yall make the front end
 '''
 
-documents = [
-    {"title": "informatics", 
-     'keywords': ["Go", "Hadoop", "Spark"], 
-     'summary': 'These are data engineering things', 'text': 'idk text'},
+# documents = [
+#     {"title": "informatics", 
+#      'keywords': ["Go", "Hadoop", "Spark"], 
+#      'summary': 'These are data engineering things', 'text': 'idk text'},
 
-    {"title": "informatics", 
-     'keywords': ["Python", "JavaScript", "Java", "SQL", "R", "C++"], 
-     'summary': 'programming languages', 'text': 'idk text'},
+#     {"title": "informatics", 
+#      'keywords': ["Python", "JavaScript", "Java", "SQL", "R", "C++"], 
+#      'summary': 'programming languages', 'text': 'idk text'},
 
-    {"title": "informatics", 
-     'keywords': ["Agile", "Cybersecurity", "Analytics", "Cloud Computing"], 
-     'summary': 'industry terms', 'text': 'idk text'},
+#     {"title": "informatics", 
+#      'keywords': ["Agile", "Cybersecurity", "Analytics", "Cloud Computing"], 
+#      'summary': 'industry terms', 'text': 'idk text'},
 
-    {"title": "informatics", 
-     'keywords': ["Tableau", "Looker"], 
-     'summary': 'These are data viz', 'text': 'idk text'}
+#     {"title": "informatics", 
+#      'keywords': ["Tableau", "Looker"], 
+#      'summary': 'These are data viz', 'text': 'idk text'}
 
 
-]
-uwwebsites.insert_many(documents)
+# ]
+# uwwebsites.insert_many(documents)
 
+# uwwebsites.insert_one({'text': 'inserty testfnoiudoksndfjsnfk jsdn'})
 
 for doc in uwwebsites.find():
     print(doc)
@@ -71,14 +72,14 @@ We could end up using Word2Vec or tf-idf but I think im the only one who could i
 It should be pretty easy to simply ask Perplexity to do this for us so likely do that
 '''
 
-query = ["AWS", "Azure", "Google Cloud", 'Python']
-sites = [doc for doc in uwwebsites.find()]
-returned_site = {}
+# query = ["AWS", "Azure", "Google Cloud", 'Python']
+# sites = [doc for doc in uwwebsites.find()]
+# returned_site = {}
 
-for site in sites:
-    for i in query:
-        if i in set(site['keywords']):
-            print('site found!')
-            returned_site = site
-            print('Website:', returned_site['title'])
-            print('Summary:', returned_site['summary'])
+# for site in sites:
+#     for i in query:
+#         if i in set(site['keywords']):
+#             print('site found!')
+#             returned_site = site
+#             print('Website:', returned_site['title'])
+#             print('Summary:', returned_site['summary'])
