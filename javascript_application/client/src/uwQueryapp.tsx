@@ -53,7 +53,7 @@ const DEBUG: boolean = true;
     if (DEBUG) console.debug("do summary");
     //perplexity call right here
     this.queryPerplexity();
-    this.setState({summary:"worked"});
+    this.setState({summary:"Loading..."});
 
   };
   doQuestChange=(quest:string): void =>{
@@ -63,18 +63,22 @@ const DEBUG: boolean = true;
   };
  queryPerplexity=async():Promise<void>=>{
   //
+  const content:string="you are picking the id choice with the best answer to this question"+this.state.question+"from this dataset:"+this.stringify(this.state.keywords);
   const options = {
     method: 'POST',
     headers: {
       Authorization: 'Bearer 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',
       'Content-Type': 'application/json'
     },
-    body: '{"model":"llama-3.1-sonar-small-128k-online","messages":[{"role":"assistant","content":"input string"}],"search_domain_filter":[],"max_tokens":5000}'
-};
+    body: JSON.stringify({model:"llama-3.1-sonar-small-128k-online",
+      messages:[{role:"user",
+        content:content}],
+        search_domain_filter:[]})
+  };
   console.log(this.stringify(this.state.keywords));
   await fetch('https://api.perplexity.ai/chat/completions', options)
   .then(response => response.json())
-  .then((response:any)=>{this.setState({summary:response.choices[0].message.content});console.log(response.choices[0].message.content);console.log(response);})
+  .then((response:any)=>{console.log(response);this.setState({summary:response.choices[0].message.content});console.log(response);})
   .catch(err => console.error(err));
   }
     
